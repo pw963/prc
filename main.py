@@ -28,6 +28,14 @@ async def reload(ctx, ext):
     except:
         return await ctx.send(f"Not a valid extension.")
 
+# Very basic command, so I decided not to make a cog for it.
+@client.command(
+    name="code",
+    aliases=["github", "repository", "rep"]
+)
+async def code(ctx):
+    await ctx.send(f"View the bot's repository here: https://github.com/pw963/prc")
+    
 # Loading
 if __name__ == "__main__":
 
