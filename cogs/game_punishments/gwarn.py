@@ -41,7 +41,7 @@ class GameWarn(commands.Cog):
             is_circular=False
         ) # Getting the user's avatar thumbnail.
         # Inserting the punishment.
-        punishments.insert_one({"type":"Warn", "time":getest(), "user":user.name, "display_name":user.display_name, "url": avatar_image, "guild":ctx.guild.id, "reason":reason})
+        punishments.insert_one({"type":"Warn", "time":getest(), "user":user.name, "display_name":user.display_name, "url": avatar_image, "guild":ctx.guild.id, "reason":reason, "id":user.id})
 
         em = Embed(
             title=f"{user.name} ({user.display_name}) has been warned",
@@ -51,16 +51,16 @@ class GameWarn(commands.Cog):
         )
         em.add_field(name="Reason", value=reason, inline=False)
         
-        em.add_field(name="Count", value=f"{punishments.count_documents({'user':user.name, 'type':'Warn', 'guild':ctx.guild.id})}", inline=False)
+        em.add_field(name="Count", value=f"{punishments.count_documents({'id':user.id, 'type':'Warn', 'guild':ctx.guild.id})}", inline=False)
 
         em.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
 
         em.set_thumbnail(url=avatar_image)
         
-        if punishments.count_documents({"user":user.name, "type":"Warn", "guild":ctx.guild.id}) == 3: # If the amount of warns is 3.
+        if punishments.count_documents({"id":user.id, "type":"Warn", "guild":ctx.guild.id}) == 3: # If the amount of warns is 3.
             em.set_footer(text=f"This user now has 3 warnings, and should be kicked.")
 
-        if punishments.count_documents({"user":user.name, "type":"Warn", "guild":ctx.guild.id}) > 3: # If the amount of warns exceeds 3.
+        if punishments.count_documents({"id":user.id, "type":"Warn", "guild":ctx.guild.id}) > 3: # If the amount of warns exceeds 3.
             em.set_footer(text=f"This user has exceeded 3 warnings, and should be kicked.")
 
         await channel.send(embed=em)
