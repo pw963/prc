@@ -1,49 +1,45 @@
-# Importing
-from discord.ext import commands
 import discord
-from discord.ext import commands
-from dotenv import load_dotenv
 from config.globals import extensions
+from discord.ext import commands
 import os
+from webserver import keep_alive
 
-load_dotenv()
-
-# Setting the Intents
 intents = discord.Intents.default()
 intents.members = True
-intents.reactions = True
 intents.messages = True
+intents.reactions = True
 
-client = commands.Bot(command_prefix=".", case_insensitive=True, intents = intents)
+client = commands.Bot(command_prefix="g.", case_insensitive=True, intents = intents)
 
-# Reload command, when I'm lazy to restart the entire program.
 @client.command(
-    name="reload"
+    name="reload",
+    usage="`g.reload cogs.verification.verify`",
+    help = f"Hidden Command ##This command allows the bot owner to reload commands. ##`Extension` ##`Bot Owner`"
 )
-async def reload(ctx, ext):
+@commands.is_owner()
+async def reload(ctx, arg):
     try:
-        client.unload_extension(ext)
-        client.load_extension(ext)
-        return await ctx.send("Reloaded")
-    except:
-        return await ctx.send(f"Not a valid extension.")
+        client.unload_extension(f"{arg}")
+        client.load_extension(f"{arg}")
+        await ctx.send(f"✅ Successfully loaded " + arg)
+    except: await ctx.send(f"⚠ An error occured.")
 
-# Very basic command, so I decided not to make a cog for it.
+
 @client.command(
-    name="code",
-    aliases=["github", "repository", "rep"]
+    name="github",
+    aliases=["code", "repository", "rep"],
+    help=f"Code ##This command will provide the URL for the bot's code repository on GitHub. ##`None` ##`None`",
+    usage=f"`g.github`"
 )
-async def code(ctx):
-    await ctx.send(f"View the bot's repository here: https://github.com/pw963/prc")
-    
-# Loading
+async def github(ctx):
+    await ctx.send(f"**{client.user.name}**'s Code Repository: <https://github.com/pw963/prc/>")
+
 if __name__ == "__main__":
-
-    client.remove_command("help")
-
+    client.remove_command('help')
     for ext in extensions:
         try: client.load_extension(ext)
-        except: client.load_extension(ext) # Happens to me sometimes. They didn't load properly so if that happened, they would be loaded, which would work.
-        print(f"{ext} loaded.")
+        except: client.load_extension(ext)
+        print(f"Loaded: {ext}")
 
-client.run(os.environ["TOKEN"]) # Logging in with "TOKEN" from the .env file
+keep_alive()
+client.run(os.environ["TOKEN"])
