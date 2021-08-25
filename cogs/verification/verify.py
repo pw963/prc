@@ -20,7 +20,7 @@ class Verify(commands.Cog):
         help=f"Verification ##This command will allow people to verify with `Bloxlink` to help moderators act more quickly and more efficiently when giving punishments. ##`None` ##`None`"
     )
     async def verify(self, ctx):
-        await ctx.send(f"Hello, **{ctx.author.name}**! Let me see if I can retrieve your Roblox account information...")
+        await ctx.send(f"Hello, **{ctx.author.mention}**! Let me see if I can retrieve your Roblox account information...")
 
         response_API = requests.get(f'https://api.blox.link/v1/user/{ctx.author.id}')
         data = response_API.text
@@ -35,9 +35,18 @@ class Verify(commands.Cog):
             try: await ctx.author.edit(nick=f"{user.display_name} (@{user.name}) ✔")
             except: sidenote = f"*I didn't have enough permissions to change your nickname.*"
 
+            role = discord.utils.get(ctx.guild.roles, name="Unverified")
+            try: await ctx.author.remove_roles(role)
+            except: pass
+            role2 = discord.utils.get(ctx.guild.roles, name=f"Verified")
+            role3 = discord.utils.get(ctx.guild.roles, name="Civilian")
+
+            try: await ctx.author.add_roles(role2, role3)
+            except: pass
+
             em = Embed(
                 title=f"Verification Successful",
-                description = f"**{user.display_name} (@{user.name})**, you have been verified with **Bloxlink**!\n\nYour Discord account is now linked with your Roblox account{', and your nickname has been updated' if sidenote == '' else ''}. {sidenote}",
+                description = f"**{user.display_name} (@{user.name})**, you have been verified with **Bloxlink**!\n\nYour Discord account is now linked with your Roblox account{', your nickname has been updated' if sidenote == '' else ''}. {sidenote}",
                 color = discord.Color.red(),
                 timestamp = datetime.utcnow()
             )
