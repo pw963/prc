@@ -6,5 +6,6 @@ extensions = [
     "cogs.game_punishments.warn",
     "cogs.verification.verify",
     "cogs.help",
-    "cogs.events.on_member_join"
+    "cogs.events.on_member_join",
+    "cogs.events.on_member_remove"
 ]
