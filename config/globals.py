@@ -5,5 +5,6 @@ extensions = [
     "cogs.game_punishments.unban",
     "cogs.game_punishments.warn",
     "cogs.verification.verify",
-    "cogs.help"
+    "cogs.help",
+    "cogs.events.on_member_join"
 ]
