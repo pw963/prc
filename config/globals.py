@@ -7,5 +7,8 @@ extensions = [
     "cogs.verification.verify",
     "cogs.help",
     "cogs.events.on_member_join",
-    "cogs.events.on_member_remove"
+    "cogs.events.on_member_remove",
+    "cogs.activity.start_check",
+    "cogs.events.on_raw_reaction_add",
+    "cogs.events.on_ready"
 ]
